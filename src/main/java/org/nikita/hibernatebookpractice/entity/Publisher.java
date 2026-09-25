@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 public class Publisher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "publisher_seq")
-    @SequenceGenerator(name = "publisher_seq", sequenceName = "publisher_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
