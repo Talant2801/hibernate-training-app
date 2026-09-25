@@ -1,10 +1,10 @@
 package org.nikita.hibernatebookpractice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +20,14 @@ public class Publisher {
     private String name;
 
     private String country;
+
+    @ToString.Exclude
+    @Builder.Default
+    @OneToMany(mappedBy = "publisher", orphanRemoval = true)
+    private List<Book> books = new ArrayList<>();
+
+    public void addBook(Book book) {
+        books.add(book);
+        book.setPublisher(this);
+    }
 }

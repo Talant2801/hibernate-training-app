@@ -10,6 +10,8 @@ import lombok.ToString;
 import org.nikita.hibernatebookpractice.converter.PriceConverter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -37,4 +39,8 @@ public class Book {
     private Price price;
     @Enumerated(EnumType.STRING)
     private Condition condition;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
 }
