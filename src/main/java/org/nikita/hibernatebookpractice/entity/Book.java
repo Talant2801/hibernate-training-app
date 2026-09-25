@@ -40,7 +40,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 }
