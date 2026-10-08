@@ -3,6 +3,7 @@ package org.nikita.hibernatebookpractice.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +11,6 @@ import lombok.ToString;
 import org.nikita.hibernatebookpractice.converter.PriceConverter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -19,11 +18,13 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Book {
     @Id
+    @EqualsAndHashCode.Include
     @Column(name="isbn")
     private String id;
     private String title;
@@ -40,6 +41,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
