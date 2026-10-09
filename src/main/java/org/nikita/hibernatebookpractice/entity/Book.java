@@ -12,7 +12,6 @@ import org.nikita.hibernatebookpractice.converter.PriceConverter;
 
 import java.time.LocalDate;
 
-
 @Entity
 @Table(name="books")
 @Getter
