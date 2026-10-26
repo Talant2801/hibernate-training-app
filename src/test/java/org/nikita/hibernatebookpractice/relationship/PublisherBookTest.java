@@ -2,18 +2,17 @@ package org.nikita.hibernatebookpractice.relationship;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nikita.hibernatebookpractice.entity.Book;
 import org.nikita.hibernatebookpractice.entity.Publisher;
+import org.nikita.hibernatebookpractice.integration.AbstractIntegrationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PublisherBookTest {
+public class PublisherBookTest extends AbstractIntegrationTest {
 
     private static final String ISBN = "978-0134685991";
 
@@ -21,22 +20,14 @@ public class PublisherBookTest {
 
     private static final String PUBLISHER_NAME = "Addison-Wesley";
 
-    private SessionFactory sessionFactory;
-
     private Session session;
 
     private Long publisherId;
 
     @BeforeEach
     void setUp() {
-        sessionFactory = new Configuration()
-                .configure("hibernate-h2-test.cfg.xml")
-                .setProperty("hibernate.generate_statistics", "true")
-                .buildSessionFactory();
         session = sessionFactory.openSession();
-
         session.beginTransaction();
-        sessionFactory.getSchemaManager().truncateMappedObjects();
 
         Publisher publisher = Publisher.builder()
                 .name(PUBLISHER_NAME)
@@ -59,7 +50,6 @@ public class PublisherBookTest {
     @AfterEach
     void tearDown() {
         session.close();
-        sessionFactory.close();
     }
 
     // Step 1: @ManyToOne(fetch = LAZY) — find() selects only the book,

@@ -2,41 +2,30 @@ package org.nikita.hibernatebookpractice.relationship;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.stat.Statistics;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nikita.hibernatebookpractice.entity.Book;
 import org.nikita.hibernatebookpractice.entity.Publisher;
+import org.nikita.hibernatebookpractice.integration.AbstractIntegrationTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NPlusOneTest {
+public class NPlusOneTest extends AbstractIntegrationTest {
 
     private static final int PUBLISHERS = 3;
     private static final int BOOKS_PER_PUBLISHER = 2;
 
-    private SessionFactory sessionFactory;
     private Statistics statistics;
 
     @BeforeEach
     void setUp() {
-        sessionFactory = new Configuration()
-                .configure("hibernate-test.cfg.xml")
-                .setProperty("hibernate.generate_statistics", "true")
-                .buildSessionFactory();
         statistics = sessionFactory.getStatistics();
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.createNativeMutationQuery("""
-                truncate table book_loan, book_listing, books, publisher, reader
-                restart identity cascade
-                """).executeUpdate();
 
             for (int p = 1; p <= PUBLISHERS; p++) {
                 Publisher publisher = Publisher.builder()
@@ -57,11 +46,6 @@ public class NPlusOneTest {
         }
 
         statistics.clear();
-    }
-
-    @AfterEach
-    void tearDown() {
-        sessionFactory.close();
     }
 
     @Test
