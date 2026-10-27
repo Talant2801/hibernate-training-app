@@ -73,19 +73,17 @@ public class NPlusOneTest extends AbstractIntegrationTest {
     @Test
     void joinFetchLoadsBooksAndPublishersInOneQuery() {
         try (Session session = sessionFactory.openSession()) {
-            List<Book> books = session
+            assertQueryCount(1, () -> {List<Book> books = session
                     .createSelectionQuery("from Book b left join fetch b.publisher", Book.class)
                     .getResultList();
 
-            assertEquals(PUBLISHERS * BOOKS_PER_PUBLISHER, books.size());
-            assertTrue(Hibernate.isInitialized(books.get(0).getPublisher()));
+                assertEquals(PUBLISHERS * BOOKS_PER_PUBLISHER, books.size());
+                assertTrue(Hibernate.isInitialized(books.get(0).getPublisher()));
 
-            System.out.println("=== books loaded");
-            for (Book book : books) {
-                System.out.println(book.getTitle() + " → " + book.getPublisher().getName());
-            }
-
-            assertEquals(1, statistics.getPrepareStatementCount());
+                System.out.println("=== books loaded");
+                for (Book book : books) {
+                    System.out.println(book.getTitle() + " → " + book.getPublisher().getName());
+                }});
         }
     }
 }
