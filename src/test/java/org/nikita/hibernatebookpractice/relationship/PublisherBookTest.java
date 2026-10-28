@@ -34,11 +34,12 @@ public class PublisherBookTest extends AbstractIntegrationTest {
                 .country("US")
                 .build();
         session.persist(publisher);
-        session.persist(Book.builder()
+        Book book = Book.builder()
                 .id(ISBN)
                 .title("Effective Java")
-                .publisher(publisher)
-                .build());
+                .build();
+        publisher.addBook(book);             // sets BOTH sides
+        session.persist(book);
         session.getTransaction().commit();
         publisherId = publisher.getId();
 
@@ -143,7 +144,7 @@ public class PublisherBookTest extends AbstractIntegrationTest {
     void bookRemovedFromCollectionIsDeletedAsOrphan() {
         session.beginTransaction();
         Publisher publisher = session.find(Publisher.class, publisherId);
-        publisher.getBooks().remove(publisher.getBooks().get(0));
+        publisher.removeBook(publisher.getBooks().get(0));
         session.getTransaction().commit();
         session.clear();
 

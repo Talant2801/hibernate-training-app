@@ -33,6 +33,11 @@ public class Publisher {
         book.setPublisher(this);
     }
 
+    public void removeBook(Book book) {
+        books.remove(book);
+        book.setPublisher(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
