@@ -88,8 +88,23 @@ public class PublisherBookTest extends AbstractIntegrationTest {
         Book book = session.find(Book.class, ISBN);
 
         assertEquals(Book.builder().id(ISBN).build(), book);
-        assertEquals(Publisher.builder().name(PUBLISHER_NAME).build(),
+        assertNotEquals(Publisher.builder().name(PUBLISHER_NAME).build(),
                 session.find(Publisher.class, publisherId));
+    }
+
+    @Test
+    void equalityIsBasedOnId() {
+        Book book = session.find(Book.class, ISBN);
+        assertEquals(Book.builder().id(ISBN).build(), book);
+
+        Publisher loaded = session.find(Publisher.class, publisherId);
+        assertNotEquals(loaded, Publisher.builder().name(PUBLISHER_NAME).build());
+
+        try (Session other = sessionFactory.openSession()) {
+            Publisher sameRow = other.find(Publisher.class, publisherId);
+            assertNotSame(loaded, sameRow);
+            assertEquals(loaded, sameRow);
+        }
     }
 
     // Step 3: Publisher.books is mappedBy (inverse side) — Hibernate ignores it when writing,

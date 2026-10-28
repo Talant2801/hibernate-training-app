@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,7 +19,6 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @EqualsAndHashCode.Include
     private String name;
 
     private String country;
@@ -33,5 +31,20 @@ public class Publisher {
     public void addBook(Book book) {
         books.add(book);
         book.setPublisher(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Publisher other)) return false;
+        if ((this.getId() != null) && (this.getId().equals(other.getId()))) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
